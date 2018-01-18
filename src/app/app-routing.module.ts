@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import {
-  AuthGuard,
-  NotFoundComponent
-} from './shared/shared.barrel'
+import { AuthGuard, NotFoundComponent } from './shared/';
 
-export const routes: Routes = [
+const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: 'app/home/home.module#HomeModule' },
   { path: 'user', loadChildren: 'app/user/user.module#UserModule' },
@@ -19,5 +16,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-
 export class AppRoutingModule {}

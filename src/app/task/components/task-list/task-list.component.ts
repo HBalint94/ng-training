@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  Task,
-  TaskService
-} from '../../task.barrel';
+import { TaskService } from '../../services/task.service';
+import { Task } from '../../models/task';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-task-list',
@@ -12,7 +11,7 @@ import {
 })
 export class TaskListComponent implements OnInit {
   public tasks: Task[];
-  public loading: boolean = true;
+  public loading: boolean;
 
   public constructor(private _taskService: TaskService) {
     //
@@ -24,28 +23,40 @@ export class TaskListComponent implements OnInit {
 
   public loadTasks() {
     this.loading = true;
-    this._taskService.list({
-      success: response => this.tasks = response,
-      finally: () => this.loading = false
-    });
+    this._taskService.list().subscribe(
+      tasks => {
+        this.tasks = tasks;
+        this.loading = false;
+      }
+    );
   }
 
   public addNewTask() {
     this.loading = true;
-    let task = new Task();
+    const task = new Task();
     task.name = 'New Task';
-    this._taskService.create(
-      task,
-      {
-        finally: () => this.loadTasks()
-      }
-    )
+    this._taskService.create(task).subscribe(
+      () => this.loadTasks(),
+      () => this.loadTasks()
+    );
   }
 
   public removeTask(task: Task) {
-    let index: number = this.tasks.indexOf(task);
+    const index = this.tasks.indexOf(task);
     if (index !== -1) {
       this.tasks.splice(index, 1);
+    }
+  }
+
+  public removeAllTasks(){
+    for(let task of this.tasks){
+       this._taskService.delete(task).subscribe(
+         () =>{this.removeTask(task)
+        if(this.tasks.length == 0){
+            this.loadTasks();
+        }},
+         () => this.loadTasks()
+       );         
     }
   }
 

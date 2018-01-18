@@ -1,14 +1,14 @@
-import { NgTrainingPage } from './app.po';
+import { AppPage } from './app.po';
 
 describe('ng-training App', () => {
-  let page: NgTrainingPage;
+  let page: AppPage;
 
   beforeEach(() => {
-    page = new NgTrainingPage();
+    page = new AppPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display home works', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('home works!');
   });
 });

@@ -1,32 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import {
-  NotFoundComponent,
-  NavigationComponent,
-  ApiService,
-  AuthService,
-  AuthGuard
-} from './shared.barrel';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { ApiService, AuthService, AuthGuard } from './';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule
-  ],
-  exports: [
-    NotFoundComponent,
-    NavigationComponent
-  ],
-  declarations: [
-    NotFoundComponent,
-    NavigationComponent
+    RouterModule,
+    HttpClientModule
   ],
   providers: [
     ApiService,
     AuthService,
     AuthGuard
+  ],
+  declarations: [
+    NotFoundComponent,
+    NavigationComponent
+  ],
+  exports: [
+    NavigationComponent
   ]
 })
 export class SharedModule { }

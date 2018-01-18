@@ -1,57 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 
-import { ApiService, ApiResponseConfig } from '../../shared/shared.barrel';
-import { Task } from '../task.barrel';
+import { Task } from '../';
+import { ApiService } from '../../shared/';
 
 @Injectable()
-export class TaskService {
+export class TaskService extends ApiService {
 
-  public constructor(private _apiService: ApiService) {
-    //
+  public list(): Observable<Task[]> {
+    return this.request('GET', 'task');
   }
 
-  public list(responseConfig: ApiResponseConfig): void {
-    this._apiService.request(
-      {
-        method: 'Get',
-        url: 'task'
-      },
-      responseConfig
-    );
+  public create(task: Task): Observable<Task> {
+    return this.request('POST', 'task', task);
   }
 
-  public create(task: Task, responseConfig: ApiResponseConfig): void {
-    this._apiService.request(
-      {
-        method: 'Post',
-        url: 'task',
-        body: task
-      },
-      responseConfig
-    )
+  public update(task: Task): Observable<Task> {
+    return this.request('PATCH', 'task/' + task.id, task);
   }
 
-  public update(task: Task, responseConfig: ApiResponseConfig): void {
-    this._apiService.request(
-      {
-        method: 'Patch',
-        url: 'task/' + task.id,
-        body: task
-      },
-      responseConfig
-    )
-  }
-
-  public delete(task: Task, responseConfig: ApiResponseConfig): void {
-    this._apiService.request(
-      {
-        method: 'Delete',
-        url: 'task/' + task.id
-      },
-      responseConfig
-    );
+  public delete(task: Task): Observable<void> {
+    return this.request('DELETE', 'task/' + task.id, task);
   }
 
 }

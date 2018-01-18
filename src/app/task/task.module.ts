@@ -1,13 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  TaskRoutingModule,
-  TaskListComponent,
-  TaskListItemComponent,
-  TaskService,
-  AgePipe
-} from './task.barrel';
+
+import { TaskRoutingModule } from './task-routing.module';
+import { TaskListComponent, TaskListItemComponent, AgePipe, TaskService } from './';
 
 @NgModule({
   imports: [
@@ -15,13 +11,13 @@ import {
     FormsModule,
     TaskRoutingModule
   ],
+  providers: [
+    TaskService
+  ],
   declarations: [
     TaskListComponent,
     TaskListItemComponent,
     AgePipe
-  ],
-  providers: [
-    TaskService
   ]
 })
 export class TaskModule { }

@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 import { environment } from '../../../environments/environment';
-import { User } from '../user.barrel';
+import { User } from '../';
 
 @Injectable()
 export class UserService {
 
-  public constructor(private _http: Http) {
+  public constructor(private _http: HttpClient) {
     //
   }
 
   public register(user: User): Observable<Response> {
-    return this._http.post(
+    return this._http.post<Response>(
       environment.apiEndpoint + '/user/register',
       user
     );

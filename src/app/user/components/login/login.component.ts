@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 
-import { User, UserService } from '../../user.barrel';
-import { AuthService } from '../../../shared/shared.barrel';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../../shared/';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,8 @@ import { AuthService } from '../../../shared/shared.barrel';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public loading: boolean = true;
+
+  public loading = true;
   public user: User = new User();
   public form = new FormGroup(
     {

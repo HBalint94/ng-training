@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import { environment } from '../../../environments/environment';
-import { User } from '../../user/user.barrel';
+import { User } from '../../user/';
 
 @Injectable()
 export class AuthService {
@@ -12,28 +13,29 @@ export class AuthService {
   public user: User;
   public token: string;
 
-  constructor(private _http: Http, private _router: Router) {
+  constructor(private _http: HttpClient, private _router: Router) {
     this._loadFromStorage();
   }
 
   public login(user: User): Observable<Response> {
-    let observable: Observable<Response> = this._http.post(
+    const observable: Observable<Response> = this._http.post<Response>(
       environment.apiEndpoint + '/auth',
       user
     );
-
+    const subject = new Subject<any>();
     observable.subscribe(
       (response: Response) => {
-        this.user = response.json()['user'];
-        this.token = response.json()['token'];
+        this.user = response['user'];
+        this.token = response['token'];
         this._saveToStorage();
+        subject.next(response);
       },
       (error: any) => {
         this.token = undefined;
+        subject.error(error);
       }
-    )
-
-    return observable;
+    );
+    return subject.asObservable();
   }
 
   public logout(): void {
@@ -58,7 +60,7 @@ export class AuthService {
 
   private _loadFromStorage(): void {
     this.token = localStorage.getItem('token');
-    let userString: string = localStorage.getItem('user');
+    const userString: string = localStorage.getItem('user');
     this.user = userString ? JSON.parse(userString) : undefined;
   }
 
